@@ -3,7 +3,8 @@
 	<head>
 		<meta charset="UTF-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-		<title>Document</title>
+		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+		<title>ziphs-law</title>
 	</head>
 	<body>
 		<style>
@@ -23,19 +24,44 @@
 		</style>
 		<h1>
 			Распределение слов по частоте использования в порядке убывания, текст
-												      может состоять только из слов
+															      может состоять только из слов
 			<span style="color: red">цифр круглых скобочек и обычных знаков
-															      припенания! Другие символы сломают программу!</span>
+																			      припенания! Другие символы сломают программу!</span>
 		</h1>
 		<textarea name="input" id="string" cols="30" rows="10"></textarea>
 		<button id="button">распределить слова</button>
 		<table id="table"></table>
+		<div id="graphic" style="width:90%;height:500px;"></div>
+		<span id="text"></span>
 		<script>
 			var string = "";
 var words = new Array();
 var quantities = new Array();
 
 var table = document.getElementById("table");
+var text = document.getElementById("text");
+
+const drawGraphic = () => {
+GRAPHIC = document.getElementById("graphic");
+let meter = 0;
+const X = quantities.map(() => {
+meter++;
+return meter;
+});
+
+Plotly.plot(GRAPHIC, [
+{
+x: X,
+y: quantities
+},
+], {
+margin: {
+t: 0
+}
+}, {showSendToCloud: true});
+
+text.innerHTML = "Как видно из грaфика, он хорошо апроксимируется гиперболой";
+};
 
 const drawTable = (words, quantities) => {
 for (let i = 0; i < words.length; i++) {
@@ -64,7 +90,7 @@ quantities[j + 1] = current;
 }
 }
 }
-}
+};
 
 const changeHandler = (e) => (string = e.target.value);
 const clickHandler = () => {
@@ -80,7 +106,7 @@ str = str.replace(/\*/g, () => " ");
 str = str.replace(/\^/g, () => " ");
 str = str.replace(/\+/g, () => " ");
 str = str.trim();
-if (! str) 
+if (! str)
 return alert("строка пустая!");
 
 table.innerHTML = "";
@@ -106,6 +132,7 @@ str = str.trim();
 }
 sort();
 drawTable(words, quantities);
+drawGraphic();
 words = [];
 quantities = [];
 };

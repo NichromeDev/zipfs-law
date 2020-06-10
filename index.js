@@ -3,6 +3,32 @@ var words = new Array();
 var quantities = new Array();
 
 var table = document.getElementById("table");
+var text = document.getElementById("text");
+
+const drawGraphic = () => {
+  GRAPHIC = document.getElementById("graphic");
+  let meter = 0;
+  const X = quantities.map(() => {
+    meter++;
+    return meter;
+  });
+
+  Plotly.plot(
+    GRAPHIC,
+    [
+      {
+        x: X,
+        y: quantities,
+      },
+    ],
+    {
+      margin: { t: 0 },
+    },
+    { showSendToCloud: true }
+  );
+
+  text.innerHTML = "Как видно из грaфика, он хорошо апроксимируется гиперболой";
+};
 
 const drawTable = (words, quantities) => {
   for (let i = 0; i < words.length; i++) {
@@ -31,7 +57,7 @@ const sort = () => {
       }
     }
   }
-}
+};
 
 const changeHandler = (e) => (string = e.target.value);
 const clickHandler = () => {
@@ -72,6 +98,7 @@ const clickHandler = () => {
   }
   sort();
   drawTable(words, quantities);
+  drawGraphic();
   words = [];
   quantities = [];
 };
